@@ -1,7 +1,7 @@
 const express = require('express');
 const data = require('./data.js')
 const app = express();
-const port = 8080
+const port = 2330;
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.html');
@@ -10,6 +10,15 @@ app.get('/', (req,res) => {
 app.get('/api/v1/pets', (req,res) => {
     res.send(data)
 })
+
+
+app.get('/api/v1/pets/owner', (req, res) => {
+    const { owner } = req.query;
+    const filtered = data.filter(
+     (pet) => pet.owner.toLowerCase() === owner.toLowerCase()
+    );
+    res.send(filtered);
+ });
 
 app.get('/api/v1/pets/:name', (req,res) => {
     let petName;
@@ -20,13 +29,6 @@ app.get('/api/v1/pets/:name', (req,res) => {
 })
 
 
-app.get('/api/v1/pets/owner', (req, res) => {
-   let petOwner;
-   data.forEach((pet) => {
-    if(pet.owner === req.query.name) petOwner = pet;
-   });
-   res.send(petOwner)
-})
 
 
 
